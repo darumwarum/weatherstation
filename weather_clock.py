@@ -1,11 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import curses
 import socket
-import sys
 import time as timer
-import math
 import logging as log
 log.basicConfig(level=log.INFO)
 
@@ -13,7 +10,6 @@ from time import *
 
 from tinkerforge.ip_connection import IPConnection
 from tinkerforge.ip_connection import Error
-from tinkerforge.brick_master import Master
 from tinkerforge.bricklet_lcd_20x4 import LCD20x4
 from tinkerforge.bricklet_ambient_light import AmbientLight
 from tinkerforge.bricklet_humidity import Humidity
@@ -143,9 +139,9 @@ class WeatherStation:
     def cb_illuminance(self, illuminance):
         if self.lcd is not None:
             i = illuminance / 10.0 
-            if i < 10.0 and self.lcd.is_backlight_on():
+            if i < 0.5 and self.lcd.is_backlight_on():
                 self.lcd.backlight_off()
-            elif i >= 10.0 and not self.lcd.is_backlight_on():
+            elif i >= 0.5 and not self.lcd.is_backlight_on():
                 self.lcd.backlight_on()
 
     def cb_enumerate(self, uid, connected_uid, position, hardware_version,
